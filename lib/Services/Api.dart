@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:my_andalas/Models/DetailTA_Model.dart';
 import 'package:my_andalas/Models/LoginModel.dart';
 import 'package:my_andalas/Models/ProfileModel.dart';
 import 'package:my_andalas/Models/TA_Model.dart';
@@ -80,6 +81,27 @@ class Api {
       return responseThesesFromJson(response.body).theses;
     } else {
       throw Exception('Failed to load profile');
+    }
+  }
+
+  //DetailTheses
+  Future<DetailTa> getDetailThesis(String id) async {
+    final token = await readToken();
+    if (token == null) {
+      throw Exception('Token Tidak Ditemukan');
+    }
+
+    final response = await http.get(
+      Uri.parse('${baseUrl}my-theses/$id'),
+      headers: {
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      return detailTaFromJson(response.body);
+    } else {
+      throw Exception('Failed to load thesis');
     }
   }
 }

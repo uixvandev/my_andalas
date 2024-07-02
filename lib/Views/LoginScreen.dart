@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_andalas/Services/Api.dart';
-import 'package:my_andalas/Views/Component/BottomNavigation.dart';
-import 'package:my_andalas/Views/Component/Button.dart';
+import 'package:my_andalas/Views/Widgets/Button.dart';
+import 'package:my_andalas/Views/Widgets/BottomNavigation.dart';
 
 class Loginscreen extends StatefulWidget {
   const Loginscreen({super.key});

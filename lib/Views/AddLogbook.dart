@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:iconly/iconly.dart';
 import 'package:my_andalas/Styles/Theme.dart';
-import 'package:my_andalas/Views/Component/Button.dart';
+import 'package:my_andalas/Views/Widgets/Button.dart';
 
 
 class AddLogbook extends StatefulWidget {

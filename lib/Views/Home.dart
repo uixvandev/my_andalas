@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 import 'dart:ui';
 
@@ -384,8 +383,8 @@ class HomeScreen extends StatelessWidget {
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) =>
-                                                const DetailScreenTA(
-                                                  id: "",
+                                                DetailScreenTA(
+                                                  id: listTheses[index].id,
                                                 )));
                                   },
                                 ),

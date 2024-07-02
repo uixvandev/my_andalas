@@ -4,7 +4,6 @@ import 'package:my_andalas/Styles/Theme.dart';
 import 'package:my_andalas/Views/Home.dart';
 import 'package:my_andalas/Views/ListLogbook.dart';
 
-
 class BottomNavigation extends StatefulWidget {
   const BottomNavigation({super.key});
 
