@@ -6,7 +6,6 @@ import 'package:my_andalas/Models/ProfileModel.dart';
 import 'package:my_andalas/Models/TA_Model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
 class Api {
   final String baseUrl = "https://backend-pmp.unand.dev/api/";
 
@@ -15,7 +14,7 @@ class Api {
     await prefs.setString('login_token', token);
   }
 
-  Future <String?> readToken() async {
+  Future<String?> readToken() async {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('login_token');
     return token;
@@ -99,6 +98,7 @@ class Api {
     );
 
     if (response.statusCode == 200) {
+      print(response.body);
       return detailTaFromJson(response.body);
     } else {
       throw Exception('Failed to load thesis');

@@ -248,7 +248,7 @@ class HomeScreen extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            "20",
+                            "12",
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 16,

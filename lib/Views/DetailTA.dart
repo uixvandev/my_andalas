@@ -50,7 +50,7 @@ class DetailScreenTA extends StatelessWidget {
                       ),
                       const SizedBox(height: 16),
                       Text(
-                        thesis.title!,
+                        "${thesis.thesis?.title}",
                         style: const TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
@@ -58,16 +58,16 @@ class DetailScreenTA extends StatelessWidget {
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        'Topic: ${thesis.topicId}',
+                        'Topic: ${thesis.thesis?.thesisAbstract}',
                         style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
                       const SizedBox(height: 16),
-                      Text(
-                        thesis.detailTaAbstract!,
-                        style: const TextStyle(
+                      const Text(
+                        "",
+                        style: TextStyle(
                           fontSize: 16,
                         ),
                       ),

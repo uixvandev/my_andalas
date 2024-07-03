@@ -9,11 +9,36 @@ DetailTa detailTaFromJson(String str) => DetailTa.fromJson(json.decode(str));
 String detailTaToJson(DetailTa data) => json.encode(data.toJson());
 
 class DetailTa {
+  final String? status;
+  final String? message;
+  final ThesisList? thesis;
+
+  DetailTa({
+    this.status,
+    this.message,
+    this.thesis,
+  });
+
+  factory DetailTa.fromJson(Map<String, dynamic> json) => DetailTa(
+        status: json["status"],
+        message: json["message"],
+        thesis:
+            json["thesis"] == null ? null : ThesisList.fromJson(json["thesis"]),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "status": status,
+        "message": message,
+        "thesis": thesis?.toJson(),
+      };
+}
+
+class ThesisList {
   final String? id;
   final String? topicId;
   final String? studentId;
   final String? title;
-  final String? detailTaAbstract;
+  final String? thesisAbstract;
   final dynamic startAt;
   final int? status;
   final dynamic grade;
@@ -26,12 +51,12 @@ class DetailTa {
   final List<dynamic>? seminars;
   final List<dynamic>? defenses;
 
-  DetailTa({
+  ThesisList({
     this.id,
     this.topicId,
     this.studentId,
     this.title,
-    this.detailTaAbstract,
+    this.thesisAbstract,
     this.startAt,
     this.status,
     this.grade,
@@ -45,12 +70,12 @@ class DetailTa {
     this.defenses,
   });
 
-  factory DetailTa.fromJson(Map<String, dynamic> json) => DetailTa(
+  factory ThesisList.fromJson(Map<String, dynamic> json) => ThesisList(
         id: json["id"],
         topicId: json["topic_id"],
         studentId: json["student_id"],
         title: json["title"],
-        detailTaAbstract: json["abstract"],
+        thesisAbstract: json["abstract"],
         startAt: json["start_at"],
         status: json["status"],
         grade: json["grade"],
@@ -81,7 +106,7 @@ class DetailTa {
         "topic_id": topicId,
         "student_id": studentId,
         "title": title,
-        "abstract": detailTaAbstract,
+        "abstract": thesisAbstract,
         "start_at": startAt,
         "status": status,
         "grade": grade,

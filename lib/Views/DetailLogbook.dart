@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:my_andalas/Models/LogbookModel.dart';
 import 'package:my_andalas/Styles/style.dart';
-import 'package:my_andalas/Views/Widgets/Button.dart';
+import 'package:my_andalas/Views/Component/Button.dart';
+
 
 class DetailScreenLogbook extends StatelessWidget {
   final Logbook logbook;
