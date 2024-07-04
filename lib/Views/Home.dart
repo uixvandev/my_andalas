@@ -8,6 +8,7 @@ import 'package:iconly/iconly.dart';
 import 'package:my_andalas/Models/LogbookModel.dart';
 import 'package:my_andalas/Models/ProfileModel.dart';
 import 'package:my_andalas/Models/TA_Model.dart';
+import 'package:my_andalas/Models/TopicsModel.dart';
 import 'package:my_andalas/Services/Api.dart';
 import 'package:my_andalas/Styles/Theme.dart';
 import 'package:my_andalas/Styles/style.dart';
@@ -267,11 +268,15 @@ class HomeScreen extends StatelessWidget {
         ),
       );
 
-  Widget _daftarTA() => FutureBuilder<List<Thesis>>(
-      future: api.getTheses(),
+  Widget _daftarTA() => FutureBuilder(
+      future: Future.wait([
+        api.getTheses(),
+        api.getTopics(),
+      ]),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          List<Thesis> listTheses = snapshot.data!;
+          List<Thesis> listTheses = snapshot.data![0] as List<Thesis>;
+          List<Datum>? listTopics = snapshot.data![1] as List<Datum>?;
           return Flexible(
             child: Padding(
                 padding:
@@ -312,6 +317,11 @@ class HomeScreen extends StatelessWidget {
                           itemCount: listTheses.length,
                           itemBuilder: (BuildContext context, index) {
                             final theses = listTheses[index];
+                            Datum? topic;
+                            if (listTopics != null &&
+                                index < listTopics.length) {
+                              topic = listTopics[index];
+                            }
                             return Card(
                               color: Colors.white,
                               shadowColor: Colors.black.withOpacity(0),
@@ -361,7 +371,7 @@ class HomeScreen extends StatelessWidget {
                                                 mainAxisSize: MainAxisSize.min,
                                                 children: [
                                                   Text(
-                                                    theses.topicId,
+                                                    topic?.name ?? 'Unknown',
                                                     style: const TextStyle(
                                                       color: Color(0xFF008042),
                                                       fontSize: 11,

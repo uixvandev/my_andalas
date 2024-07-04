@@ -4,6 +4,7 @@ import 'package:my_andalas/Models/DetailTA_Model.dart';
 import 'package:my_andalas/Models/LoginModel.dart';
 import 'package:my_andalas/Models/ProfileModel.dart';
 import 'package:my_andalas/Models/TA_Model.dart';
+import 'package:my_andalas/Models/TopicsModel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Api {
@@ -98,10 +99,30 @@ class Api {
     );
 
     if (response.statusCode == 200) {
-      print(response.body);
       return detailTaFromJson(response.body);
     } else {
       throw Exception('Failed to load thesis');
+    }
+  }
+
+  //GetTopics
+  Future<List<Datum>?> getTopics() async {
+    final token = await readToken();
+    if (token == null) {
+      throw Exception('Token not found');
+    }
+
+    final response = await http.get(
+      Uri.parse('${baseUrl}thesis-topics'),
+      headers: {
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      return topicsModelFromJson(response.body).data;
+    } else {
+      throw Exception('Failed to load topics');
     }
   }
 }
