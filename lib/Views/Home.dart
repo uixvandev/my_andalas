@@ -15,6 +15,7 @@ import 'package:my_andalas/Styles/style.dart';
 import 'package:my_andalas/Views/DetailLogbook.dart';
 import 'package:my_andalas/Views/DetailTA.dart';
 import 'package:my_andalas/Views/ListLogbook.dart';
+import 'package:my_andalas/Views/ListTA.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
@@ -284,11 +285,11 @@ class HomeScreen extends StatelessWidget {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Row(
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text(
+                        const Text(
                           "Daftar TA",
                           style: TextStyle(
                             color: Colors.black,
@@ -297,14 +298,22 @@ class HomeScreen extends StatelessWidget {
                             fontWeight: FontWeight.w400,
                           ),
                         ),
-                        Text(
-                          "Lihat Semua",
-                          style: TextStyle(
-                            color: Color(0xFF008042),
-                            fontSize: 16,
-                            fontFamily: 'SF Pro',
-                            fontWeight: FontWeight.w400,
+                        InkWell(
+                          child: const Text(
+                            "Lihat semua",
+                            style: TextStyle(
+                              color: Color(0xFF008042),
+                              fontSize: 16,
+                              fontFamily: 'SF Pro',
+                              fontWeight: FontWeight.w400,
+                            ),
                           ),
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ListTa()));
+                          },
                         ),
                       ],
                     ),
