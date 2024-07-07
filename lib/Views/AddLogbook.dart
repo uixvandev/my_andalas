@@ -1,157 +1,120 @@
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
-import 'package:iconly/iconly.dart';
-import 'package:my_andalas/Styles/Theme.dart';
-import 'package:my_andalas/Views/Component/Button.dart';
+import 'package:my_andalas/Models/AddLogbookModel.dart';
+import 'package:my_andalas/Services/Api.dart';
 
+class AddLogbookForm extends StatefulWidget {
+  final String supervisorId;
 
-class AddLogbook extends StatefulWidget {
-  const AddLogbook({super.key});
+  const AddLogbookForm({super.key, required this.supervisorId});
 
   @override
-  State<AddLogbook> createState() => _AddLogbookState();
+  _AddLogbookFormState createState() => _AddLogbookFormState();
 }
 
-class _AddLogbookState extends State<AddLogbook> {
-  final TextEditingController _dateController = TextEditingController();
+class _AddLogbookFormState extends State<AddLogbookForm> {
+  final _formKey = GlobalKey<FormState>();
+  late DateTime _date;
+  late String _problem;
+  late String _progress;
+
+  final Api api = Api();
+
+  @override
+  void initState() {
+    super.initState();
+    _date = DateTime.now();
+    _problem = '';
+    _progress = '';
+  }
+
+  Future<void> _submitForm() async {
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
+
+      AddLogbookModel logbook = AddLogbookModel(
+        supervisorId: widget.supervisorId,
+        date: _date,
+        problem: _problem,
+        progress: _progress,
+      );
+
+      try {
+        await api.addLogbook(widget.supervisorId, logbook);
+        // Logbook successfully added, you can navigate or show a success message
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Logbook successfully added')),
+        );
+        // Optionally, navigate back to the previous screen or refresh data
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to add logbook: $e')),
+        );
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F5F5),
       appBar: AppBar(
-        iconTheme: const IconThemeData(color: Color(0xFF008043)),
-        title: const Text('Tambah Logbook'),
-        bottom: PreferredSize(
-            preferredSize: const Size.fromHeight(1.0),
-            child: Container(
-              color: const Color(0xFFE5E5E5),
-              height: 1.0,
-            )),
+        title: const Text('Add Logbook'),
       ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Container(
-            margin: const EdgeInsets.all(16),
-            padding: const EdgeInsets.all(16),
-            decoration: ShapeDecoration(
-              color: Colors.white,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8)),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                TextField(
-                  controller: _dateController,
-                  decoration: InputDecoration(
-                    hintText: "Pilih tanggal",
-                    filled: true,
-                    fillColor: white,
-                    prefixIcon: Icon(
-                      IconlyLight.calendar,
-                      color: green1,
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: Colors.black12),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: green1),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                  readOnly: true,
-                  onTap: _selectDate,
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              TextFormField(
+                decoration: const InputDecoration(labelText: 'Date'),
+                readOnly: true,
+                controller: TextEditingController(
+                  text: _date.toString(),
                 ),
-                const Gap(24),
-                const Text(
-                  "Aktivitas",
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 17,
-                    fontFamily: 'SF-Pro-Display',
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                const Gap(8),
-                TextField(
-                  decoration: InputDecoration(
-                      contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 8),
-                      filled: true,
-                      fillColor: const Color(0xA5E3E3E3),
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      hintText:
-                          'Contoh Bertemu dengan pembimbing akademik untuk diskusi mengenai kerangka kerja tugas akhir.',
-                      hintStyle: const TextStyle(
-                        color: Color(0xFF6F6F6F),
-                        fontFamily: 'SF-Pro-Display',
-                      )),
-                  maxLines: 9,
-                  maxLength: 300,
-                ),
-                const Gap(16),
-                const Text(
-                  "Catatan",
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 17,
-                    fontFamily: 'SF-Pro-Display',
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                const Gap(8),
-                TextField(
-                  decoration: InputDecoration(
-                      contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 8),
-                      filled: true,
-                      fillColor: const Color(0xA5E3E3E3),
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      hintText:
-                          'Contoh Bertemu dengan pembimbing akademik untuk diskusi mengenai kerangka kerja tugas akhir.',
-                      hintStyle: const TextStyle(
-                        color: Color(0xFF6F6F6F),
-                        fontFamily: 'SF-Pro-Display',
-                      )),
-                  maxLines: 4,
-                  maxLength: 100,
-                ),
-                const Gap(24),
-                ElevatedButton(
-                    style: buttonPrimary,
-                    onPressed: () {},
-                    child: const Text(
-                      "Kirim",
-                      style: TextStyle(color: Colors.white),
-                    ))
-              ],
-            ),
+                onTap: () async {
+                  final pickedDate = await showDatePicker(
+                    context: context,
+                    initialDate: _date,
+                    firstDate: DateTime(2000),
+                    lastDate: DateTime(2100),
+                  );
+                  if (pickedDate != null && pickedDate != _date) {
+                    setState(() {
+                      _date = pickedDate;
+                    });
+                  }
+                },
+              ),
+              TextFormField(
+                decoration: const InputDecoration(labelText: 'Problem'),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter the problem';
+                  }
+                  return null;
+                },
+                onSaved: (newValue) => _problem = newValue!,
+              ),
+              TextFormField(
+                decoration: const InputDecoration(labelText: 'Progress'),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter the progress';
+                  }
+                  return null;
+                },
+                onSaved: (newValue) => _progress = newValue!,
+              ),
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: _submitForm,
+                child: const Text('Submit'),
+              ),
+            ],
           ),
         ),
       ),
     );
-  }
-
-  Future<void> _selectDate() async {
-    DateTime? picked = await showDatePicker(
-        context: context,
-        initialDate: DateTime.now(),
-        firstDate: DateTime(2000),
-        lastDate: DateTime(2100));
-
-    if (picked != null) {
-      setState(() {
-        _dateController.text = picked.toString().split(" ")[0];
-      });
-    }
   }
 }

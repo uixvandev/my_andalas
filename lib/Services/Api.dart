@@ -1,6 +1,9 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:my_andalas/Models/AddLogbookModel.dart';
 import 'package:my_andalas/Models/DetailTA_Model.dart';
+import 'package:my_andalas/Models/LogbookModel.dart';
+import 'package:my_andalas/Models/LogbooksModel.dart';
 import 'package:my_andalas/Models/LoginModel.dart';
 import 'package:my_andalas/Models/ProfileModel.dart';
 import 'package:my_andalas/Models/TA_Model.dart';
@@ -42,6 +45,11 @@ class Api {
     } else {
       throw Exception('Gagal untuk login');
     }
+  }
+
+  Future<void> logout() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('login_token');
   }
 
   Future<Data?> getProfile() async {
@@ -125,4 +133,51 @@ class Api {
       throw Exception('Failed to load topics');
     }
   }
+   Future<List<Log>?> getLogbooks(String id) async {
+    final token = await readToken();
+    if (token == null) {
+      throw Exception('Token not found');
+    }
+
+    final response = await http.get(
+      Uri.parse('${baseUrl}my-thesis/$id/logs'),
+      headers: {
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      return logbooksModelFromJson(response.body).logs;
+    } else {
+      throw Exception('Failed to load logbooks');
+    }
+  }
+
+  Future<AddLogbookModel> addLogbook(String supervisorId, AddLogbookModel logbook) async {
+  try {
+    // Format date as ISO 8601 string
+    String? formattedDate = logbook.date?.toIso8601String();
+
+    final response = await http.post(
+      Uri.parse('${baseUrl}my-thesis/${logbook.thesisId}/$supervisorId/logs'),
+      body: {
+        'super_id': supervisorId,
+        'date': formattedDate,
+        'problem': logbook.problem,
+        'progress': logbook.progress,
+      },
+    );
+
+    if (response.statusCode == 200) {
+      print(response.body);
+      return AddLogbookModel.fromJson(jsonDecode(response.body));
+    } else {
+      throw Exception('Failed to add logbook: ${response.statusCode}');
+    }
+  } catch (e) {
+    throw Exception('Failed to add logbook: $e');
+  }
+}
+
+
 }

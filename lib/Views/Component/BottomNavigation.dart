@@ -4,6 +4,7 @@ import 'package:my_andalas/Styles/Theme.dart';
 import 'package:my_andalas/Views/Home.dart';
 import 'package:my_andalas/Views/ListLogbook.dart';
 import 'package:my_andalas/Views/ListTA.dart';
+import 'package:my_andalas/Views/ProfilePage.dart';
 
 class BottomNavigation extends StatefulWidget {
   const BottomNavigation({super.key});
@@ -17,8 +18,10 @@ class _BottomNavigationState extends State<BottomNavigation> {
 
   final List<Widget> _pages = [
     HomeScreen(),
-    const Listlogbook(),
+    Listlogbook(),
     ListTa(),
+    ProfilePage(),
+
   ];
 
   @override
@@ -58,6 +61,8 @@ class _BottomNavigationState extends State<BottomNavigation> {
               icon: Icon(IconlyBold.folder),
               label: 'Tugas Akhir',
             ),
+            BottomNavigationBarItem(
+                icon: Icon(IconlyBold.profile), label: 'Profile'),
           ],
           selectedItemColor: green1,
           unselectedItemColor: const Color(0xFFCBCBCB),

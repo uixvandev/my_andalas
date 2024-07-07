@@ -15,6 +15,7 @@ class ListTa extends StatelessWidget {
     return Scaffold(
       backgroundColor: const Color(0xFFF5F5F5),
       appBar: AppBar(
+        automaticallyImplyLeading: true,
         iconTheme: const IconThemeData(color: Color(0xFF008043)),
         title: const Text(
           'Daftar Tugas Akhir',
