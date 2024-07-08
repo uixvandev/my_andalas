@@ -5,6 +5,7 @@ import 'package:my_andalas/Views/Home.dart';
 import 'package:my_andalas/Views/ListLogbook.dart';
 import 'package:my_andalas/Views/ListTA.dart';
 import 'package:my_andalas/Views/ProfilePage.dart';
+import 'package:my_andalas/Views/SeminarsPage.dart';
 
 class BottomNavigation extends StatefulWidget {
   const BottomNavigation({super.key});
@@ -18,10 +19,9 @@ class _BottomNavigationState extends State<BottomNavigation> {
 
   final List<Widget> _pages = [
     HomeScreen(),
-    Listlogbook(),
+    SeminarsPage(),
     ListTa(),
     ProfilePage(),
-
   ];
 
   @override
@@ -55,7 +55,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
             ),
             BottomNavigationBarItem(
               icon: Icon(IconlyBold.document),
-              label: 'Logbook',
+              label: 'Seminar',
             ),
             BottomNavigationBarItem(
               icon: Icon(IconlyBold.folder),
