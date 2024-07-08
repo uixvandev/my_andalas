@@ -6,6 +6,7 @@ import 'package:my_andalas/Models/LogbookModel.dart';
 import 'package:my_andalas/Models/LogbooksModel.dart';
 import 'package:my_andalas/Models/LoginModel.dart';
 import 'package:my_andalas/Models/ProfileModel.dart';
+import 'package:my_andalas/Models/Quote.dart';
 import 'package:my_andalas/Models/TA_Model.dart';
 import 'package:my_andalas/Models/TopicsModel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -133,7 +134,8 @@ class Api {
       throw Exception('Failed to load topics');
     }
   }
-   Future<List<Log>?> getLogbooks(String id) async {
+
+  Future<List<Log>?> getLogbooks(String id) async {
     final token = await readToken();
     if (token == null) {
       throw Exception('Token not found');
@@ -153,31 +155,41 @@ class Api {
     }
   }
 
-  Future<AddLogbookModel> addLogbook(String supervisorId, AddLogbookModel logbook) async {
-  try {
-    // Format date as ISO 8601 string
-    String? formattedDate = logbook.date?.toIso8601String();
+  Future<AddLogbookModel> addLogbook(
+      String supervisorId, AddLogbookModel logbook) async {
+    try {
+      // Format date as ISO 8601 string
+      String? formattedDate = logbook.date?.toIso8601String();
 
-    final response = await http.post(
-      Uri.parse('${baseUrl}my-thesis/${logbook.thesisId}/$supervisorId/logs'),
-      body: {
-        'super_id': supervisorId,
-        'date': formattedDate,
-        'problem': logbook.problem,
-        'progress': logbook.progress,
-      },
-    );
+      final response = await http.post(
+        Uri.parse('${baseUrl}my-thesis/${logbook.thesisId}/$supervisorId/logs'),
+        body: {
+          'super_id': supervisorId,
+          'date': formattedDate,
+          'problem': logbook.problem,
+          'progress': logbook.progress,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        print(response.body);
+        return AddLogbookModel.fromJson(jsonDecode(response.body));
+      } else {
+        throw Exception('Failed to add logbook: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Failed to add logbook: $e');
+    }
+  }
+
+  //QuoteOfDay
+  Future<Quote> fetchQuote() async {
+    final response = await http.get(Uri.parse('https://favqs.com/api/qotd'));
 
     if (response.statusCode == 200) {
-      print(response.body);
-      return AddLogbookModel.fromJson(jsonDecode(response.body));
+      return quoteFromJson((response.body));
     } else {
-      throw Exception('Failed to add logbook: ${response.statusCode}');
+      throw Exception('Failed to load quote');
     }
-  } catch (e) {
-    throw Exception('Failed to add logbook: $e');
   }
-}
-
-
 }

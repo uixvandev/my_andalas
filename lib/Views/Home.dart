@@ -1,11 +1,14 @@
 import 'dart:convert';
 import 'dart:ui';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:iconly/iconly.dart';
 import 'package:my_andalas/Models/ProfileModel.dart';
+import 'package:my_andalas/Models/Quote.dart';
 import 'package:my_andalas/Models/TA_Model.dart';
 import 'package:my_andalas/Models/TopicsModel.dart';
 import 'package:my_andalas/Services/Api.dart';
@@ -28,6 +31,7 @@ class HomeScreen extends StatelessWidget {
             children: [
               _userInfo(),
               _cardInfo(),
+              _quote(),
               _daftarTA(),
               // _historyLogbook(context)
             ],
@@ -280,6 +284,74 @@ class HomeScreen extends StatelessWidget {
           }
         },
       );
+
+  Widget _quote() => FutureBuilder<Quote>(
+      future: api.fetchQuote(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          final quote = snapshot.data!.quote;
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+            child: Column(
+              children: [
+                const Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Quote of the Day",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
+                        fontFamily: 'SF Pro',
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                  ],
+                ),
+                const Gap(16),
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Column(
+                    children: [
+                      Text(
+                        ('"${quote.body}"'),
+                        style: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 16,
+                          fontFamily: 'SF Pro',
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                      const Gap(16),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            quote.author,
+                            style: const TextStyle(
+                              fontStyle: FontStyle.italic,
+                              color: Colors.black,
+                              fontSize: 16,
+                              fontFamily: 'SF Pro',
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          );
+        } else {
+          return const Center(child: CircularProgressIndicator());
+        }
+      });
 
   Widget _daftarTA() => FutureBuilder(
       future: Future.wait([
